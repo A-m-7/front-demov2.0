@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import { APILINK } from "src/EndPoint";
 import { create_axios_instance } from "../../actions/axiosActions"
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CButton, CRow, CCol, CForm } from "@coreui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { CModal, CModalTitle, CModalHeader, CModalBody, CModalFooter, CFormInput } from "@coreui/react";
+import { CModal, CModalTitle, CModalHeader, CModalBody, CFormInput } from "@coreui/react";
+import { LogOut } from "src/actions/authAction";
 const axiosApiInstance = create_axios_instance()
 
 
@@ -14,7 +14,6 @@ const ViewDepartments = () => {
   const [title, settitle] = useState("")
   const [visible, setvisible] = useState(false)
   const [update, setupdate] = useState("")
-  let history = useHistory()
   const getDeps = async () => {
     await axiosApiInstance.get(APILINK + "/Department/").then((res) => {
       if (res.data) {
@@ -22,9 +21,11 @@ const ViewDepartments = () => {
         setdepartment_list(res.data)
       }
     }).catch((err) => {
-      console.log(err)
-      if (err.response) {
-        console.log(err);
+      if (err.response.status === 401 || err.response.status === 403) {
+        LogOut()
+      }
+      else {
+        console.log(err)
       }
     });
   }

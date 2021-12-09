@@ -1,4 +1,4 @@
-import { LOGOUT, REGISTER } from "./actionTypes.js";
+import { REGISTER } from "./actionTypes.js";
 import axios from "axios";
 import { APILINK } from "../EndPoint";
 import Cookies from "js-cookie";
@@ -48,8 +48,8 @@ export const userRegister = (userdata, history) => async (dispatch) => {
   return regiserdata;
 };
 
-export const LogOut = () => async (dispatch) => {
-  localStorage.removeItem("accessToken");
+export const LogOut = () => {
+  Cookies.remove("accessToken");
   localStorage.removeItem("refreshToken");
-  dispatch({ type: LOGOUT });
+  window.location.reload()
 };
